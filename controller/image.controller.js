@@ -5,29 +5,29 @@ const _ = require('lodash');
 module.exports.createImage = async (req, res, next) => {
   try {
     const {
-      file: { filename },
+      files,
       params: { superheroId },
     } = req;
 
-    // const creatImageValues = files.map(file => {
-    //   return (file = {
-    //     imagePath: fileName,
-    //     supurheroId,
-    //   });
-    // });
-
-    // const createdImages = await Image.bulkCreate(creatImageValues);
-
-    const createdImage = await Image.create({
-      imagePath: filename,
-      superheroId,
+    const creatImageValues = files.map(file => {
+      return (file = {
+        imagePath: file.name,
+        superheroId,
+      });
     });
+
+    const createdImages = await Image.bulkCreate(creatImageValues);
+
+    // const createdImage = await Image.create({
+    //   imagePath: filename,
+    //   superheroId,
+    // });
     
-    if (!createdImage) {
+    if (!createdImages) {
       return next(createError(400));
     }
 
-    res.send(createdImage);
+    res.send(createdImages);
   } catch (err) {
     next(err);
   }
