@@ -4,7 +4,7 @@ const superheroRouter = require('./superhero');
 
 const router = Router();
 
-router.use('/super', superheroRouter);
+router.use('/superheroes', superheroRouter);
 
 
 module.exports = router;

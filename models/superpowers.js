@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: true,
         },
+        allowNull: false,
       },
     },
     {

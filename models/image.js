@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
 
     static associate (models) {
-      Image.belongsTo(models.Seperhero, {
+      Image.belongsTo(models.Superhero, {
         foreignKey: 'superheroId',
       }); // UserId | userId -> user_id
     }
@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: true,
         },
+        allowNull:false,
       },
       // superheroId: {
       //   type: DataTypes.INTEGER,
