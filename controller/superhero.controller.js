@@ -1,22 +1,67 @@
 const createError = require('http-errors');
-const { Superhero } = require('../models');
+const { Superhero, Superpower } = require('../models');
 const _ = require('lodash');
 
 const checkBody = body =>
-  _.pick(body, ['nickname', 'realName', 'originDescription', 'catchPhrase']);
+  _.pick(body, [
+    'nickname',
+    'realName',
+    'originDescription',
+    'catchPhrase',
+    'superpowers',
+  ]);
+const includeSuperpower = {
+  include: [
+    {
+      model: Superpower,
+      attributes: ['id', 'superpower'],
+      through: {
+        attributes: [],
+      },
+    },
+  ],
+};
 
 module.exports.createSuperhero = async (req, res, next) => {
   try {
-    const { body } = req;
+    const {
+      body: { superpowers },
+      body,
+    } = req;
+    
     const createdSuperhero = await Superhero.create(body);
 
-    if (!createdSuperhero) {
-      return next(createError(400));
-    }
+    if (superpowers.length) {
+      const creatSuperpowersValues = superpowers.map(item => {
+        return (item = {
+          superpower: item,
+          superheroId: createdSuperhero.id,
+        });
+      });
+      const createdSuperpowers = await Superpower.bulkCreate(
+        creatSuperpowersValues
+      );
+      await createdSuperhero.addSuperpowers(createdSuperpowers);
 
-    res.status(201).send({
-      data: createdSuperhero,
-    });
+      if (!createdSuperhero) {
+        return next(createError(400));
+      }
+
+      const createdSuperheroWithSuperpowers = await Superhero.findByPk(
+        createdSuperhero.id,
+        {
+          ...includeSuperpower,
+        }
+      );
+
+      res.status(201).send({
+        data: createdSuperheroWithSuperpowers,
+      });
+    } else {
+      res.status(201).send({
+        data: createdSuperhero,
+      });
+    }
   } catch (err) {
     next(err);
   }
@@ -27,9 +72,9 @@ module.exports.getAllSuperheroes = async (req, res, next) => {
     const { pagination = {} } = req;
     const superheroes = await Superhero.findAll({
       ...pagination,
+      ...includeSuperpower,
     });
 
-    console.log(superheroes);
     if (!superheroes.length) {
       return next(createError(404, 'Superheroes not found'));
     }
@@ -48,14 +93,15 @@ module.exports.getSuperhero = async (req, res, next) => {
       params: { id },
     } = req;
 
-    const superhero = await Superhero.findByPk(id);
+    const superherWithSuperpowers = await Superhero.findByPk(id, {
+      ...includeSuperpower,
+    });
 
-    if (!superhero) {
-      const err = createError(404, 'Superhero not found');
-      return next(err);
+    if (!superherWithSuperpowers) {
+      return next(createError(404));
     }
 
-    res.send(superhero);
+    res.send({ data: superherWithSuperpowers });
   } catch (err) {
     next(err);
   }
@@ -78,7 +124,15 @@ module.exports.updateSuperhero = async (req, res, next) => {
       return next(createError(400, 'Superhero cant be updated'));
     }
 
-    res.send({ data: updatedSuperhero });
+    const updatedSuperherWithSuperpowers = await Superhero.findByPk(id, {
+      ...includeSuperpower,
+    });
+
+    if (!updatedSuperherWithSuperpowers) {
+      return next(createError(404));
+    }
+
+    res.send({ data: updatedSuperherWithSuperpowers });
   } catch (err) {
     next(err);
   }
@@ -90,8 +144,8 @@ module.exports.deleteSuperhero = async (req, res, next) => {
       params: { id },
     } = req;
 
-    const rowsCount = await Superhero.destroy( {
-      where: { id }
+    const rowsCount = await Superhero.destroy({
+      where: { id },
     });
 
     if (rowsCount !== 1) {
