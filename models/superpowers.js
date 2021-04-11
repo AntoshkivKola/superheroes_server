@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   Superpower.init(
     {
       superpower: {
+        unique:true,
         type: DataTypes.STRING,
         validate: {
           notNull: true,

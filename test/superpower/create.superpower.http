@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "superpower": "fighting",
-  "superheroId":9
+  "superheroId":1
 }

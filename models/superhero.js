@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Superhero.init(
     {
       nickname: {
+        unique: true,
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
