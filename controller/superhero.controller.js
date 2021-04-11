@@ -25,43 +25,57 @@ const includeSuperpower = {
 module.exports.createSuperhero = async (req, res, next) => {
   try {
     const {
+      files,
       body: { superpowers },
       body,
     } = req;
 
     const createdSuperhero = await Superhero.create(body);
 
-    if (superpowers.length) {
+    if (!createdSuperhero) {
+      return next(createError(400));
+    }
+    
+    if (superpowers) {
       const creatSuperpowersValues = superpowers.map(item => {
         return (item = {
           superpower: item,
           superheroId: createdSuperhero.id,
         });
       });
+
       const createdSuperpowers = await Superpower.bulkCreate(
         creatSuperpowersValues
       );
       await createdSuperhero.addSuperpowers(createdSuperpowers);
+    }
+   
 
-      if (!createdSuperhero) {
+    if (files) {
+      const creatImageValues = files.map(file => {
+        return (file = {
+          imagePath: file.name,
+          superheroId,
+        });
+      });
+
+      const createdImages = await Image.bulkCreate(creatImageValues);
+
+      if (!createdImages) {
         return next(createError(400));
       }
-
-      const createdSuperheroWithSuperpowers = await Superhero.findByPk(
-        createdSuperhero.id,
-        {
-          ...includeSuperpower,
-        }
-      );
-
-      res.status(201).send({
-        data: createdSuperheroWithSuperpowers,
-      });
-    } else {
-      res.status(201).send({
-        data: createdSuperhero,
-      });
     }
+
+    const createdSuperheroWithSuperpowers = await Superhero.findByPk(
+      createdSuperhero.id,
+      {
+        ...includeSuperpower,
+      }
+    );
+
+    res.status(201).send({
+      data: createdSuperheroWithSuperpowers,
+    });
   } catch (err) {
     next(err);
   }

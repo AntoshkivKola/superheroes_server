@@ -1,6 +1,5 @@
 const createError = require('http-errors');
 const { Superhero, Image } = require('../models');
-const _ = require('lodash');
 
 module.exports.createImage = async (req, res, next) => {
   try {
@@ -18,11 +17,6 @@ module.exports.createImage = async (req, res, next) => {
 
     const createdImages = await Image.bulkCreate(creatImageValues);
 
-    // const createdImage = await Image.create({
-    //   imagePath: filename,
-    //   superheroId,
-    // });
-    
     if (!createdImages) {
       return next(createError(400));
     }
