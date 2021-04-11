@@ -7,13 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       Superpower.belongsToMany(models.Superhero, {
         through: 'superheroes_to_superpowers',
         foreignKey: 'superpowerId',
-      }); // UserGroup -> UserId, GroupId
+      });
     }
   }
   Superpower.init(
     {
       superpower: {
-        unique:true,
         type: DataTypes.STRING,
         validate: {
           notNull: true,

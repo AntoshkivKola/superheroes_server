@@ -2,16 +2,16 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Superhero extends Model {
-
     static associate (models) {
       // define association here
       Superhero.hasMany(models.Image, {
         foreignKey: 'superheroId',
+        onDelete: 'cascade',
       });
       Superhero.belongsToMany(models.Superpower, {
         through: 'superheroes_to_superpowers',
         foreignKey: 'superheroId',
-      }); // UserGroup -> UserId, GroupId
+      });
     }
   }
   Superhero.init(

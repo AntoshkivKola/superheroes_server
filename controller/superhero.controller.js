@@ -47,6 +47,7 @@ module.exports.createSuperhero = async (req, res, next) => {
       const createdSuperpowers = await Superpower.bulkCreate(
         creatSuperpowersValues
       );
+      
       await createdSuperhero.addSuperpowers(createdSuperpowers);
     }
    

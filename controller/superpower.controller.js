@@ -31,15 +31,15 @@ module.exports.createSuperpower = async (req, res, next) => {
     const superhero = await Superhero.findByPk(superheroId);
     await superhero.addSuperpower(superpower);
 
-    const superherWithSuperpowers = await Superhero.findByPk(superheroId, {
+    const superheroWithSuperpowers = await Superhero.findByPk(superheroId, {
       ...includeSuperpower,
     });
 
-    if (!superherWithSuperpowers) {
+    if (!superheroWithSuperpowers) {
       return next(createError(404));
     }
 
-    res.send({ data: superherWithSuperpowers });
+    res.send({ data: superheroWithSuperpowers });
   } catch (err) {
     next(err);
   }
