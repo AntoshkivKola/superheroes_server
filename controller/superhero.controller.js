@@ -166,7 +166,7 @@ module.exports.deleteSuperhero = async (req, res, next) => {
       return next(createError(400, 'Superhero cant be deleted'));
     }
 
-    res.send({ data: rowsCount });
+    res.send({ data: id });
   } catch (err) {
     next(err);
   }

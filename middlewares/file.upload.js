@@ -5,7 +5,7 @@ const { STATIC_PATH } = require('../config/static.config');
 
 const pathToImages = path.resolve(STATIC_PATH, 'images');
 
-//createPublicFolder(pathToImages);
+createPublicFolder(pathToImages);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -18,4 +18,5 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-module.exports.uploadImages = upload.array('images',10);
+module.exports = { pathToImages };
+module.exports.uploadImages = upload.array('images', 10);

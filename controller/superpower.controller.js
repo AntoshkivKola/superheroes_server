@@ -116,7 +116,7 @@ module.exports.deleteSuperpower = async (req, res, next) => {
       return next(createError(400, 'Superpower cant be deleted'));
     }
 
-    res.send({ data: rowsCount });
+    res.send({ data: id });
   } catch (err) {
     next(err);
   }
