@@ -28,7 +28,7 @@ module.exports.createSuperhero = async (req, res, next) => {
       body: { superpowers },
       body,
     } = req;
-    
+
     const createdSuperhero = await Superhero.create(body);
 
     if (superpowers.length) {

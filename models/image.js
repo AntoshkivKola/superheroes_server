@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate (models) {
       Image.belongsTo(models.Superhero, {
         foreignKey: 'superheroId',
-      }); // UserId | userId -> user_id
+      }); 
     }
   }
   Image.init(

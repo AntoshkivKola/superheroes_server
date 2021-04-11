@@ -21,6 +21,8 @@ module.exports = {
           model: 'superheroes',
           key: 'id',
         },
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       },
       createdAt: {
         field: 'created_at',

@@ -24,7 +24,7 @@ module.exports.createSuperpower = async (req, res, next) => {
     const values = checkBody(body);
 
     const superpower = await Superpower.create({
-     ...values,
+      ...values,
       superheroId,
     });
 
