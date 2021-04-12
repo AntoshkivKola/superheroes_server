@@ -1,10 +1,10 @@
-module.exports = async (req, res, next) => {
+module.exports = c => async (req, res, next) => {
   try {
     const {
       query: { limit, offset },
     } = req;
     req.pagination = {
-      limit: !limit || limit > 5 || limit <= 0 ? 5 : limit,
+      limit: !limit || limit > c || limit <= 0 ? c : limit,
       offset: !offset || offset <= 0 ? 0 : offset,
     };
     next();
