@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { Superhero, Superpower } = require('../models');
+const { Superhero, Superpower,Image } = require('../models');
 const _ = require('lodash');
 
 const checkBody = body =>
@@ -18,6 +18,11 @@ const includeSuperpower = {
       through: {
         attributes: [],
       },
+    },
+    {
+      model: Image,
+      attributes: ['id', 'imagePath'],
+     
     },
   ],
 };
