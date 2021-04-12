@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { Superhero, Superpower } = require('../models');
 
 const checkBody = body => _.pick(body, ['superpower']);
-const includeSuperpower = {
+const includeSPandImg = {
   include: [
     {
       model: Superpower,
@@ -32,7 +32,7 @@ module.exports.createSuperpower = async (req, res, next) => {
     await superhero.addSuperpower(superpower);
 
     const superheroWithSuperpowers = await Superhero.findByPk(superheroId, {
-      ...includeSuperpower,
+      ...includeSPandImg,
     });
 
     if (!superheroWithSuperpowers) {
