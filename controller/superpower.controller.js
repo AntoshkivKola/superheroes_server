@@ -23,13 +23,19 @@ module.exports.createSuperpower = async (req, res, next) => {
 
     const values = checkBody(body);
 
-    const superpower = await Superpower.create({
-      ...values,
-      superheroId,
+    const superpower = await Superpower.findOrCreate({
+      where: {
+        superpower: values.superpower,
+      },
+      defaults: {
+        ...values,
+        superheroId,
+      },
     });
 
     const superhero = await Superhero.findByPk(superheroId);
-    await superhero.addSuperpower(superpower);
+
+    await superhero.addSuperpower(superpower[0]);
 
     const superheroWithSuperpowers = await Superhero.findByPk(superheroId, {
       ...includeSPandImg,
