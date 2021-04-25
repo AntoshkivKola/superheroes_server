@@ -1,0 +1,9 @@
+/test/
+/public/
+/node_modules/
+.vscode/
+.git/
+.gitignore
+.prettierrc.json
+sequelize-data.json
+sequelize-meta.json

@@ -1,0 +1,35 @@
+version: '3.8'
+services: 
+  backend-app: 
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports: 
+      - 3005:3000
+    environment: 
+      PORT: 3000
+    networks: 
+      - compose-into
+    volumes: 
+      - ./:/server:ro
+    depends_on: 
+      - db_postgres
+
+
+  db_postgres:
+    image: postgres
+    restart: always
+    networks: 
+      - compose-into
+    environment: 
+      POSTGRES_USER: postgres
+      POSTGRES_DB: superheroes
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes: 
+      - /home/kola/Documents/postgres_backup:/var/lib/postgresql/data/pgdata
+
+networks:
+  compose-into:
+    name: comp
+  
